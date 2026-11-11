@@ -1,0 +1,54 @@
+<%- include('partials/header') %>
+<% var nm = (old.name !== undefined) ? old.name : me.name; var bi = (old.bio !== undefined) ? old.bio : (me.bio || ''); %>
+<section class="card">
+  <div class="mb-5 flex items-center gap-4">
+    <%- include('partials/avatar', { u: me, cls: 'lg' }) %>
+    <div class="min-w-0">
+      <h1 class="truncate text-xl font-extrabold text-slate-900"><%= me.name %></h1>
+      <p class="truncate text-sm text-slate-500"><%= me.email %></p>
+      <% if (me.bio) { %><p class="mt-1 text-sm text-slate-600"><%= me.bio %></p><% } %>
+    </div>
+  </div>
+  <h2 class="mb-3 border-t border-slate-100 pt-4 text-base font-bold text-slate-900">Edit Profil</h2>
+  <form method="post" action="/profile" enctype="multipart/form-data" class="space-y-4">
+    <label class="field">Nama Pengguna
+      <input type="text" name="name" maxlength="100" value="<%= nm %>" required class="input">
+    </label>
+    <label class="field">Bio
+      <textarea name="bio" rows="3" maxlength="500" class="input resize-none" placeholder="Ceritakan sedikit tentang Anda"><%= bi %></textarea>
+    </label>
+    <div class="grid gap-4 sm:grid-cols-2">
+      <label class="field">Foto Profil (upload, maks 2 MB)
+        <input type="file" name="avatar" accept="image/jpeg,image/png,image/gif,image/webp" class="file-input">
+      </label>
+      <label class="field">atau URL foto profil
+        <input type="url" name="avatar_url" maxlength="255" placeholder="https://..." class="input">
+      </label>
+    </div>
+    <% if (me.avatar) { %>
+      <label class="flex items-center gap-2 text-sm text-slate-600">
+        <input type="checkbox" name="remove_avatar" value="1" class="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"> Hapus foto profil saat ini
+      </label>
+    <% } %>
+    <div class="flex justify-end"><button class="btn btn-primary">Simpan Profil</button></div>
+  </form>
+</section>
+
+<section class="card">
+  <h2 class="mb-3 text-base font-bold text-slate-900">Ubah Password</h2>
+  <form method="post" action="/profile/password" class="space-y-4">
+    <label class="field">Password Lama
+      <input type="password" name="old_password" required class="input">
+    </label>
+    <div class="grid gap-4 sm:grid-cols-2">
+      <label class="field">Password Baru <span class="text-xs font-normal text-slate-400">min. 6 karakter</span>
+        <input type="password" name="new_password" minlength="6" required class="input">
+      </label>
+      <label class="field">Konfirmasi Password Baru
+        <input type="password" name="new_password_confirmation" minlength="6" required class="input">
+      </label>
+    </div>
+    <div class="flex justify-end"><button class="btn btn-primary">Ubah Password</button></div>
+  </form>
+</section>
+<%- include('partials/footer') %>

@@ -1,0 +1,24 @@
+<%- include('partials/header') %>
+<section class="card mx-auto mt-6 max-w-md p-7">
+  <div class="mb-6 text-center">
+    <h1 class="text-2xl font-extrabold tracking-tight text-slate-900">Buat akun baru</h1>
+    <p class="mt-1 text-sm text-slate-500">Bergabung dengan CircleJar dalam hitungan detik.</p>
+  </div>
+  <form method="post" action="/register" class="space-y-4">
+    <label class="field">Nama Lengkap
+      <input type="text" name="name" maxlength="100" value="<%= old.name || '' %>" required autofocus class="input" placeholder="Nama lengkap Anda">
+    </label>
+    <label class="field">Email
+      <input type="email" name="email" maxlength="150" value="<%= old.email || '' %>" required class="input" placeholder="nama@email.com">
+    </label>
+    <label class="field">Password <span class="text-xs font-normal text-slate-400">minimal 6 karakter</span>
+      <input type="password" name="password" minlength="6" required class="input">
+    </label>
+    <label class="field">Konfirmasi Password
+      <input type="password" name="password_confirmation" minlength="6" required class="input">
+    </label>
+    <button class="btn btn-primary w-full">Daftar &amp; Masuk</button>
+  </form>
+  <p class="mt-5 text-center text-sm text-slate-500">Sudah punya akun? <a href="/login" class="font-semibold text-indigo-600 hover:underline">Login</a></p>
+</section>
+<%- include('partials/footer') %>

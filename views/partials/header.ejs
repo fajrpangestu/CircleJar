@@ -1,0 +1,46 @@
+<% var flashStyles = {
+  success: 'border-emerald-200 bg-emerald-50 text-emerald-800',
+  danger: 'border-red-200 bg-red-50 text-red-800',
+  warning: 'border-amber-200 bg-amber-50 text-amber-800'
+}; %>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= title %> · CircleJar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body class="min-h-screen bg-slate-100 font-sans text-slate-800 antialiased">
+<header class="sticky top-0 z-20 border-b border-slate-200 bg-white/80 backdrop-blur">
+  <nav class="mx-auto flex h-14 max-w-2xl items-center justify-between px-4">
+    <a href="/" class="flex items-center gap-2 text-lg font-extrabold tracking-tight text-indigo-600">
+      <img src="/images/social-media.png" alt="CircleJar Logo" class="w-11 h-11 max-w-[32px] max-h-[32px] object-contain">
+      CircleJar
+    </a>
+    <div class="flex items-center gap-2">
+      <% if (me) { %>
+        <a href="/profile" class="flex items-center gap-2 rounded-full py-1 pl-1 pr-3 transition hover:bg-slate-100">
+          <%- include('avatar', { u: me, cls: 'sm' }) %>
+          <span class="hidden max-w-[10rem] truncate text-sm font-semibold sm:inline"><%= me.name %></span>
+        </a>
+        <form method="post" action="/logout"><button class="btn btn-soft btn-sm">Logout</button></form>
+      <% } else { %>
+        <a href="/login" class="rounded-lg px-3 py-1.5 text-sm font-semibold text-slate-600 hover:bg-slate-100">Login</a>
+        <a href="/register" class="btn btn-primary btn-sm">Daftar</a>
+      <% } %>
+    </div>
+  </nav>
+</header>
+<main class="mx-auto max-w-2xl space-y-4 px-4 py-6">
+<% if (flash) { %>
+  <div class="rounded-xl border px-4 py-3 text-sm font-medium <%= flashStyles[flash.type] || flashStyles.success %>" role="alert"><%= flash.msg %></div>
+<% } %>
+<% if (errors && errors.length) { %>
+  <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800" role="alert">
+    <ul class="list-inside list-disc space-y-0.5"><% errors.forEach(function(e){ %><li><%= e %></li><% }) %></ul>
+  </div>
+<% } %>

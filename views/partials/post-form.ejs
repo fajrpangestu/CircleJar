@@ -1,0 +1,12 @@
+<form method="post" action="/posts" enctype="multipart/form-data" class="space-y-3">
+  <textarea name="content" rows="3" maxlength="2000" class="input resize-none" placeholder="Tulis status Anda..."></textarea>
+  <div class="grid gap-3 sm:grid-cols-2">
+    <label class="field">Upload gambar (maks 2 MB)
+      <input type="file" name="image" accept="image/jpeg,image/png,image/gif,image/webp" class="file-input">
+    </label>
+    <label class="field">atau URL gambar
+      <input type="url" name="image_url" maxlength="255" placeholder="https://contoh.com/gambar.jpg" class="input">
+    </label>
+  </div>
+  <div class="flex justify-end"><button class="btn btn-primary">Posting</button></div>
+</form>

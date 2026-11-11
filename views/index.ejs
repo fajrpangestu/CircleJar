@@ -1,0 +1,79 @@
+<%- include('partials/header') %>
+<section class="card">
+  <div class="flex gap-3">
+    <%- include('partials/avatar', { u: me, cls: 'md' }) %>
+    <div class="min-w-0 flex-1">
+      <h2 class="mb-3 text-sm font-semibold text-slate-500">Apa yang Anda pikirkan, <%= me.name.split(' ')[0] %>?</h2>
+      <%- include('partials/post-form') %>
+    </div>
+  </div>
+</section>
+
+<% if (!posts.length) { %>
+  <div class="rounded-2xl border-2 border-dashed border-slate-300 p-10 text-center text-sm text-slate-500">
+    Belum ada postingan. Jadilah yang pertama membagikan sesuatu!
+  </div>
+<% } %>
+
+<% posts.forEach(function(p){ %>
+<article id="post-<%= p.id %>" class="card scroll-mt-20">
+  <header class="flex items-center gap-3">
+    <%- include('partials/avatar', { u: { name: p.name, avatar: p.avatar }, cls: 'md' }) %>
+    <div class="min-w-0">
+      <p class="truncate font-semibold text-slate-900"><%= p.name %></p>
+      <p class="text-xs text-slate-400"><%= fmt(p.created_at) %></p>
+    </div>
+    <% if (p.user_id === me.id) { %>
+      <form method="post" action="/posts/<%= p.id %>/delete" class="ml-auto" onsubmit="return confirm('Hapus postingan ini?')">
+        <button class="btn btn-danger btn-sm">Hapus</button>
+      </form>
+    <% } %>
+  </header>
+
+  <% if (p.content) { %><p class="mt-3 whitespace-pre-wrap break-words text-[15px] leading-relaxed text-slate-800"><%= p.content %></p><% } %>
+  <% if (p.image) { %><img src="<%= p.image %>" alt="Gambar postingan" loading="lazy" class="mt-3 max-h-[28rem] w-full rounded-xl bg-slate-100 object-cover"><% } %>
+
+  <div class="mt-4 flex items-center gap-3 border-y border-slate-100 py-2.5">
+    <form method="post" action="/posts/<%= p.id %>/like">
+      <% if (p.liked) { %>
+        <button class="inline-flex items-center gap-1.5 rounded-full bg-rose-50 px-3.5 py-1.5 text-sm font-semibold text-rose-600 transition hover:bg-rose-100">
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z"/></svg>
+          Disukai
+        </button>
+      <% } else { %>
+        <button class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3.5 py-1.5 text-sm font-semibold text-slate-600 transition hover:bg-rose-50 hover:text-rose-600">
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+          Suka
+        </button>
+      <% } %>
+    </form>
+    <span class="text-sm text-slate-500"><strong class="text-slate-700"><%= p.like_count %></strong> suka · <strong class="text-slate-700"><%= p.comments.length %></strong> komentar</span>
+  </div>
+
+  <div class="mt-3 space-y-3">
+    <% p.comments.forEach(function(c){ %>
+      <div class="flex gap-2.5">
+        <%- include('partials/avatar', { u: { name: c.name, avatar: c.avatar }, cls: 'sm' }) %>
+        <div class="min-w-0 rounded-2xl rounded-tl-sm bg-slate-100 px-3.5 py-2">
+          <p class="text-sm"><span class="font-semibold text-slate-900"><%= c.name %></span> <span class="ml-1 text-xs text-slate-400"><%= fmt(c.created_at) %></span></p>
+          <% if (c.comment) { %><p class="mt-0.5 whitespace-pre-wrap break-words text-sm text-slate-700"><%= c.comment %></p><% } %>
+          <% if (c.image) { %><img src="<%= c.image %>" alt="Lampiran komentar" loading="lazy" class="mt-2 max-h-56 rounded-xl"><% } %>
+        </div>
+      </div>
+    <% }) %>
+
+    <form method="post" action="/posts/<%= p.id %>/comments" enctype="multipart/form-data" class="space-y-2 pt-1">
+      <div class="flex gap-2">
+        <%- include('partials/avatar', { u: me, cls: 'sm' }) %>
+        <input type="text" name="comment" maxlength="1000" placeholder="Tulis komentar..." class="input rounded-full py-2">
+        <button class="btn btn-primary btn-sm shrink-0 rounded-full">Kirim</button>
+      </div>
+      <div class="grid gap-2 pl-10 sm:grid-cols-2">
+        <input type="file" name="image" accept="image/jpeg,image/png,image/gif,image/webp" class="file-input text-xs">
+        <input type="url" name="image_url" maxlength="255" placeholder="atau URL gambar (opsional)" class="input py-1.5 text-xs">
+      </div>
+    </form>
+  </div>
+</article>
+<% }) %>
+<%- include('partials/footer') %>

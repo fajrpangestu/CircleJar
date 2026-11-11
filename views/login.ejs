@@ -1,0 +1,18 @@
+<%- include('partials/header') %>
+<section class="card mx-auto mt-6 max-w-md p-7">
+  <div class="mb-6 text-center">
+    <h1 class="text-2xl font-extrabold tracking-tight text-slate-900">Selamat datang kembali</h1>
+    <p class="mt-1 text-sm text-slate-500">Masuk untuk melihat beranda Anda.</p>
+  </div>
+  <form method="post" action="/login" class="space-y-4">
+    <label class="field">Email
+      <input type="email" name="email" value="<%= old.email || '' %>" required autofocus class="input" placeholder="nama@email.com">
+    </label>
+    <label class="field">Password
+      <input type="password" name="password" required class="input" placeholder="••••••">
+    </label>
+    <button class="btn btn-primary w-full">Masuk</button>
+  </form>
+  <p class="mt-5 text-center text-sm text-slate-500">Belum punya akun? <a href="/register" class="font-semibold text-indigo-600 hover:underline">Daftar</a></p>
+</section>
+<%- include('partials/footer') %>
